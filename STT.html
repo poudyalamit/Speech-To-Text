@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech-To-Text</title>
+</head>
+<style>
+    body {
+        background-color: blueviolet;
+    }
+
+    .text-box {
+        height: 100%;
+        width: 100%;
+    }
+
+    #box {
+        height: 50%;
+        width: 50%;
+        margin-top: 10%;
+        margin-left: 20%;
+        font-size: 25px;
+        resize: vertical;
+        color: black;
+    }
+
+    .start,
+    .end {
+        margin: 20px;
+        padding: 10px;
+        font-size: 17px;
+        border-radius: 5px;
+        border-width: 0px;
+        background-color: brown;
+        color: aliceblue;
+    }
+
+    .button {
+        margin-left: 40%;
+    }
+    img{
+        height: 10%;
+        width: 10%;
+    }
+</style>
+
+<body>
+    <div class="text-box">
+        <textarea name="box" id="box" cols="30" rows="10" disabled></textarea>
+    </div>  
+    <div class="button">
+        <button class="start" onclick="start()">Start</button>
+        <button class="end" onclick="end()">End</button>
+    </div>
+</body>
+<script>
+    let listen = false;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.continuous = true;
+    function start() {
+        recognition.start();
+        setTimeout(function() { alert("I am listening....."); }, 1000);
+    }
+    function end() {
+        recognition.stop();
+    }
+    recognition.onresult = (event) => {
+        const textarea = document.getElementById('box');
+        for (const result of event.results) {
+            textarea.value = `${result[0].transcript}\n`;
+        }
+    };
+    recognition.onerror = (event) => {
+        alert("Error occured while recognitin.");
+        console.log(`Speech recognition error detected: ${event.error}`);
+        console.log(`Additional information: ${event.message}`);
+    };
+
+</script>
+
+</html>
